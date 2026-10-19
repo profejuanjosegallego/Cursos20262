@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Educación Digital · Platzi y Slang</title>
+<meta name="description" content="Qué deben entregar en Platzi y Slang los estudiantes de Nuevas Tecnologías y Backend II · CESDE 2026-2">
+<style>
+  :root {
+    --mag: #B0136B; --mag-d: #6E0B43; --mag-l: #FBE6F1; --mag-m: #F2BCD8;
+    --ink: #2B2B2B; --muted: #666; --bg: #FFF9FC; --card: #FFFFFF; --line: #F0D3E3;
+    --ok: #1F7A4D;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; }
+  a { color: var(--mag); }
+
+  header { background: linear-gradient(135deg, var(--mag-d), var(--mag) 60%, #D9589C); color: #fff; padding: 44px 16px 64px; position: relative; overflow: hidden; }
+  header::after { content: ""; position: absolute; width: 420px; height: 420px; border-radius: 50%; background: rgba(255,255,255,.08); right: -120px; top: -160px; animation: flota 9s ease-in-out infinite; }
+  header::before { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,.06); left: -60px; bottom: -110px; animation: flota 7s ease-in-out infinite reverse; }
+  @keyframes flota { 50% { transform: translateY(18px) scale(1.04); } }
+  .wrap { max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
+  .kicker { letter-spacing: .14em; text-transform: uppercase; font-size: 12px; opacity: .85; font-weight: 600; }
+  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.15; margin: 8px 0 10px; }
+  header p { max-width: 640px; margin: 0; opacity: .95; }
+
+  main { max-width: 980px; margin: -36px auto 0; padding: 0 16px 48px; position: relative; z-index: 2; }
+
+  .tabs { display: flex; gap: 8px; background: var(--card); border-radius: 14px; padding: 6px; box-shadow: 0 8px 24px rgba(110,11,67,.12); }
+  .tab { flex: 1; border: 0; background: transparent; padding: 14px 10px; border-radius: 10px; font: inherit; font-weight: 600; color: var(--mag-d); cursor: pointer; transition: background .25s, color .25s; }
+  .tab small { display: block; font-weight: 400; font-size: 12px; opacity: .8; }
+  .tab[aria-selected="true"] { background: var(--mag); color: #fff; }
+  .tab:focus-visible { outline: 3px solid var(--mag-m); outline-offset: 2px; }
+
+  .panel { display: none; animation: entra .45s ease both; }
+  .panel.on { display: block; }
+  @keyframes entra { from { opacity: 0; transform: translateY(12px); } }
+
+  .hero-card { margin-top: 22px; background: var(--card); border-radius: 16px; padding: 22px; border: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+  .badge { width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; font-size: 30px; background: var(--mag-l); }
+  .hero-card h2 { margin: 0 0 4px; font-size: 22px; color: var(--mag-d); }
+  .hero-card p { margin: 0; color: var(--muted); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .stat { background: var(--mag-l); border-radius: 12px; padding: 14px; }
+  .stat b { display: block; font-size: 22px; color: var(--mag-d); }
+  .stat span { font-size: 13px; color: var(--muted); }
+
+  h3 { color: var(--mag); margin: 30px 0 12px; font-size: 19px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; transition: transform .2s, box-shadow .2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(110,11,67,.10); }
+  .card .tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--mag-d); background: var(--mag-l); padding: 3px 10px; border-radius: 99px; }
+  .card h4 { margin: 10px 0 6px; font-size: 17px; }
+  .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+  .btn { display: inline-block; background: var(--mag); color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: background .2s; }
+  .btn:hover { background: var(--mag-d); }
+
+  .steps { list-style: none; padding: 0; margin: 0; counter-reset: s; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 14px 58px; position: relative; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 13px; width: 30px; height: 30px; border-radius: 50%; background: var(--mag); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+  .steps b { color: var(--mag-d); }
+
+  .timeline { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .weeks { display: grid; grid-template-columns: repeat(18, 1fr); gap: 3px; margin: 8px 0 14px; }
+  .w { height: 34px; border-radius: 6px; background: #F3EDF0; display: grid; place-items: center; font-size: 11px; color: var(--muted); }
+  .w.hit { background: var(--mag); color: #fff; font-weight: 700; animation: pulso 2.4s ease-in-out infinite; }
+  @keyframes pulso { 50% { box-shadow: 0 0 0 5px rgba(176,19,107,.18); } }
+  .legend { display: grid; gap: 8px; }
+  .legend div { display: flex; gap: 10px; align-items: baseline; font-size: 14px; }
+  .legend b { min-width: 98px; color: var(--mag-d); }
+
+  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .check li { display: flex; gap: 10px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; cursor: pointer; user-select: none; transition: background .2s; }
+  .check li .box { flex: 0 0 22px; height: 22px; border-radius: 6px; border: 2px solid var(--mag); display: grid; place-items: center; color: #fff; font-size: 14px; transition: background .2s; margin-top: 1px; }
+  .check li.done { background: #F4FBF7; }
+  .check li.done .box { background: var(--ok); border-color: var(--ok); }
+  .check li.done .box::after { content: "✓"; }
+  .check li.done span { text-decoration: line-through; color: var(--muted); }
+
+  .note { margin-top: 14px; background: var(--mag-l); border-left: 4px solid var(--mag); border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+
+  .support { margin-top: 34px; background: var(--mag-d); color: #fff; border-radius: 16px; padding: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .support h3 { color: #fff; margin: 0 0 6px; grid-column: 1 / -1; }
+  .support a { color: #FFD3EA; }
+  .support div { font-size: 14px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 16px 28px; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  @media (max-width: 720px) {
+    .grid, .stats, .support { grid-template-columns: 1fr; }
+    .hero-card { grid-template-columns: 1fr; }
+    .weeks { grid-template-columns: repeat(9, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="kicker">CESDE · Educación Digital 2026-2 · Nivel 3</div>
+    <h1>¿Qué debo entregar en Platzi y Slang?</h1>
+    <p>Técnico Laboral como Asistente en Desarrollo de Software. Elige tu curso para ver qué certificados entregar, cuándo y cuánto valen.</p>
+  </div>
+</header>
+
+<main>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-nt" aria-controls="p-nt" aria-selected="true">Nuevas Tecnologías<small>Platzi · Inteligencia Artificial</small></button>
+    <button class="tab" role="tab" id="t-b2" aria-controls="p-b2" aria-selected="false">Backend II<small>Slang · Inglés</small></button>
+  </div>
+
+  <!-- ===================== NUEVAS TECNOLOGÍAS ===================== -->
+  <section class="panel on" id="p-nt" role="tabpanel" aria-labelledby="t-nt">
+    <div class="hero-card reveal">
+      <div class="badge" aria-hidden="true">🤖</div>
+      <div>
+        <h2>Nuevas Tecnologías de Programación · Platzi</h2>
+        <p>Debes completar <b>dos cursos de Inteligencia Artificial en Platzi</b> y entregar el certificado de cada uno.</p>
+        <div class="stats">
+          <div class="stat"><b>2</b><span>certificados de Platzi</span></div>
+          <div class="stat"><b>Semana 17</b><span>fecha límite de entrega</span></div>
+          <div class="stat"><b>5.0</b><span>por certificado, en la nota que tú elijas</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="reveal">Los cursos que debes aprobar</h3>
+    <div class="grid">
+      <article class="card reveal">
+        <span class="tag">Curso 1</span>
+        <h4>Curso de Microsoft 365 Copilot</h4>
+        <p>Uso de Copilot como asistente de productividad dentro de las herramientas de Microsoft 365.</p>
+        <a class="btn" href="https://platzi.com/cursos/copilot-365/" target="_blank" rel="noopener">Abrir curso en Platzi →</a>
+      </article>
+      <article class="card reveal">
+        <span class="tag">Curso 2</span>
+        <h4>Curso de Pensamiento Crítico para usar Inteligencia Artificial</h4>
+        <p>Cómo evaluar, contrastar y usar con criterio las respuestas que genera una IA.</p>
+        <a class="btn" href="https://platzi.com/cursos/pensamiento-critico-ia/" target="_blank" rel="noopener">Abrir curso en Platzi →</a>
+      </article>
+    </div>
+
+    <h3 class="reveal">Paso a paso</h3>
+    <ol class="steps reveal">
+      <li><b>Ingresa a Platzi</b> con la cuenta institucional que te asignó CESDE. Si no tienes acceso, escribe al soporte (al final de esta página).</li>
+      <li><b>Completa los dos cursos</b>: todas las clases y el examen final de cada uno.</li>
+      <li><b>Descarga el certificado</b> de cada curso en PDF. Verifica que aparezca tu nombre completo.</li>
+      <li><b>Entrega los dos certificados a tu docente</b> de Nuevas Tecnologías a más tardar en la <b>semana 17</b>, por el medio que se indique en clase.</li>
+      <li><b>Elige qué notas reemplazar.</b> Cada certificado reemplaza <b>una nota que tú elijas por un 5.0</b>: con los dos certificados reemplazas dos notas.</li>
+    </ol>
+
+    <h3 class="reveal">Mi lista de chequeo</h3>
+    <ul class="check reveal" data-key="nt">
+      <li><span class="box"></span><span>Activé mi cuenta de Platzi.</span></li>
+      <li><span class="box"></span><span>Terminé el Curso de Microsoft 365 Copilot y descargué su certificado.</span></li>
+      <li><span class="box"></span><span>Terminé el Curso de Pensamiento Crítico para usar IA y descargué su certificado.</span></li>
+      <li><span class="box"></span><span>Revisé que los dos certificados tengan mi nombre completo.</span></li>
+      <li><span class="box"></span><span>Entregué los dos certificados a mi docente (semana 17).</span></li>
+      <li><span class="box"></span><span>Le dije a mi docente qué dos notas quiero reemplazar por 5.0.</span></li>
+    </ul>
+    <div class="note reveal"><b>Ojo:</b> el certificado debe ser de los cursos de esta lista. Cursos diferentes no cuentan para el submódulo de Nuevas Tecnologías.</div>
+  </section>
+
+  <!-- ===================== BACKEND II ===================== -->
+  <section class="panel" id="p-b2" role="tabpanel" aria-labelledby="t-b2">
+    <div class="hero-card reveal">
+      <div class="badge" aria-hidden="true">🇬🇧</div>
+      <div>
+        <h2>Backend II (Framework) · Slang</h2>
+        <p>Debes avanzar en inglés en <b>Slang</b> y entregar <b>dos certificados de nivel</b> completados con las lecciones.</p>
+        <div class="stats">
+          <div class="stat"><b>2</b><span>certificados de nivel de Slang</span></div>
+          <div class="stat"><b>Semana 17</b><span>fecha límite de entrega</span></div>
+          <div class="stat"><b>5.0</b><span>por certificado, en la nota que tú elijas</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="reveal">Las dos entregas</h3>
+    <div class="grid">
+      <article class="card reveal">
+        <span class="tag">Hasta la semana 17</span>
+        <h4>Certificado de nivel 1</h4>
+        <p>Primer nivel de Slang completado con las lecciones. Reemplaza <b>una nota que tú elijas por un 5.0</b>.</p>
+      </article>
+      <article class="card reveal">
+        <span class="tag">Hasta la semana 17</span>
+        <h4>Certificado de nivel 2</h4>
+        <p>Segundo nivel de Slang completado. Reemplaza <b>otra nota que tú elijas por un 5.0</b>.</p>
+      </article>
+    </div>
+
+    <h3 class="reveal">Paso a paso</h3>
+    <ol class="steps reveal">
+      <li><b>Activa tu cuenta y haz el test diagnóstico.</b> El resultado define tu nivel inicial dentro de los 15 niveles de Slang.</li>
+      <li><b>Avanza con las lecciones.</b> La ruta de Inglés Técnico de tu programa es recomendable, pero los certificados salen de los <b>niveles completados</b>.</li>
+      <li><b>Descarga tus constancias</b> desde <b>Perfil → Mis constancias</b>; usa el filtro de tiempo para encontrar la del nivel que terminaste.</li>
+      <li><b>Entrega los certificados a tu docente de Backend II</b> a más tardar en la <b>semana 17</b>, por el medio que se indique en clase.</li>
+      <li><b>Elige qué notas reemplazar.</b> Cada certificado reemplaza <b>una nota que tú elijas por un 5.0</b>.</li>
+    </ol>
+    <a class="btn reveal" href="https://slangapp.com/es" target="_blank" rel="noopener" style="margin-top:14px">Abrir Slang →</a>
+
+    <h3 class="reveal">¿Qué certificado sirve? (y qué pasa con las "35 horas")</h3>
+    <div class="grid">
+      <article class="card reveal" style="border-color:#BFE3CF">
+        <span class="tag" style="background:#E6F5EC;color:#1F7A4D">✓ Sí sirve</span>
+        <h4>Constancia de curso o nivel completado</h4>
+        <p>Es el PDF que descargas en <b>Perfil → Mis constancias → pestaña «Todo» → «Descargar constancia del curso»</b>. Slang la entrega cuando <b>terminas un curso</b>. Debe tener tu nombre y el curso o nivel que completaste.</p>
+      </article>
+      <article class="card reveal" style="border-color:#F2C9A8">
+        <span class="tag" style="background:#FDF0E4;color:#9A4A06">✗ No sirve por sí sola</span>
+        <h4>Horas de estudio (por ejemplo, "35 horas")</h4>
+        <p>Las horas que llevas estudiando o la duración de un curso <b>no son un certificado</b>. CESDE pide certificados de <b>niveles completados con las lecciones</b>, no de tiempo dedicado. Si solo tienes horas acumuladas, sigue avanzando hasta terminar el curso.</p>
+      </article>
+    </div>
+    <div class="note reveal">
+      <b>¿Cómo se completa un nivel en Slang?</b> Necesitas una nota mínima del <b>70 %</b>, que Slang calcula así:
+      <b>40 %</b> terminar el curso en la Learn App, <b>40 %</b> asistencia a las clases en línea y <b>20 %</b> la evaluación final.
+      Al aprobarlo, se te asigna automáticamente el siguiente nivel.
+      <br><br>
+      <b>¿Tienes dudas sobre tu constancia?</b> Antes de entregarla, muéstrasela a tu docente o escribe a
+      <a href="mailto:soporte@slangapp.co">soporte@slangapp.co</a>.
+    </div>
+
+    <h3 class="reveal">Mi lista de chequeo</h3>
+    <ul class="check reveal" data-key="b2">
+      <li><span class="box"></span><span>Activé mi cuenta de Slang e hice el test diagnóstico.</span></li>
+      <li><span class="box"></span><span>Completé un nivel con las lecciones y descargué su constancia.</span></li>
+      <li><span class="box"></span><span>Completé un segundo nivel y descargué su constancia.</span></li>
+      <li><span class="box"></span><span>Entregué los dos certificados a mi docente (semana 17).</span></li>
+      <li><span class="box"></span><span>Le dije a mi docente qué notas quiero reemplazar por 5.0.</span></li>
+    </ul>
+    <div class="note reveal"><b>Ojo:</b> el docente contrasta cada certificado con el avance registrado en la herramienta institucional de CESDE. Solo cuentan niveles completados con las lecciones.</div>
+  </section>
+
+  <!-- ===================== CRONOGRAMA ===================== -->
+  <h3 class="reveal">Cronograma del semestre (18 semanas)</h3>
+  <div class="timeline reveal">
+    <div class="weeks" id="weeks" aria-hidden="true"></div>
+    <div class="legend">
+      <div><b>Semana 17</b><span>Fecha límite para entregar todos los certificados: los dos de Platzi (Nuevas Tecnologías) y los dos de Slang (Backend II).</span></div>
+      <div><b>Recompensa</b><span>Cada certificado reemplaza una nota que tú elijas por un 5.0.</span></div>
+    </div>
+  </div>
+
+  <section class="support reveal">
+    <h3>¿Problemas con la plataforma?</h3>
+    <div><b>Platzi</b><br><a href="mailto:team@platzi.com">team@platzi.com</a></div>
+    <div><b>Slang</b><br><a href="mailto:soporte@slangapp.co">soporte@slangapp.co</a></div>
+    <div><b>Educación Digital CESDE</b><br>Oficina 402, CESDE Medellín<br>WhatsApp 333 602 5210</div>
+  </section>
+</main>
+
+<footer>Docente: Juan José Gallego Mesa · Fuente: Guía de Educación Digital 2-2026 de CESDE (comudigital.cesde.edu.co)</footer>
+
+<script>
+  // Pestañas
+  const tabs = document.querySelectorAll('.tab');
+  function abrir(id) {
+    tabs.forEach(t => {
+      const on = t.getAttribute('aria-controls') === id;
+      t.setAttribute('aria-selected', on);
+      document.getElementById(t.getAttribute('aria-controls')).classList.toggle('on', on);
+    });
+    document.querySelectorAll('#' + id + ' .reveal').forEach(e => e.classList.add('vis'));
+    try { localStorage.setItem('ed-tab', id); } catch (e) {}
+    pintarSemanas(id);
+  }
+  tabs.forEach(t => t.addEventListener('click', () => abrir(t.getAttribute('aria-controls'))));
+
+  // Cronograma: resalta las semanas de entrega del curso elegido
+  const HITOS = { 'p-nt': [17], 'p-b2': [17] };
+  function pintarSemanas(id) {
+    const w = document.getElementById('weeks');
+    w.innerHTML = '';
+    for (let i = 1; i <= 18; i++) {
+      const d = document.createElement('div');
+      d.className = 'w' + (HITOS[id].includes(i) ? ' hit' : '');
+      d.textContent = i;
+      w.appendChild(d);
+    }
+  }
+
+  // Lista de chequeo (se recuerda en este navegador)
+  document.querySelectorAll('.check').forEach(ul => {
+    const key = 'ed-check-' + ul.dataset.key;
+    let estado = [];
+    try { estado = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) {}
+    [...ul.children].forEach((li, i) => {
+      if (estado[i]) li.classList.add('done');
+      li.addEventListener('click', () => {
+        li.classList.toggle('done');
+        try { localStorage.setItem(key, JSON.stringify([...ul.children].map(x => x.classList.contains('done')))); } catch (e) {}
+      });
+    });
+  });
+
+  // Aparición suave al hacer scroll
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
+  }), { threshold: .12 }) : null;
+  document.querySelectorAll('.reveal').forEach(e => io ? io.observe(e) : e.classList.add('vis'));
+
+  let inicial = 'p-nt';
+  try { inicial = localStorage.getItem('ed-tab') || inicial; } catch (e) {}
+  if (location.hash === '#backend') inicial = 'p-b2';
+  if (location.hash === '#nt') inicial = 'p-nt';
+  abrir(document.getElementById(inicial) ? inicial : 'p-nt');
+</script>
+</body>
+</html>
