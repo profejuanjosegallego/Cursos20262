@@ -91,6 +91,22 @@
   .bar .s2 { background: #8A0F55; } .bar .s1 { background: #D9589C; } .bar .s0 { background: #E6DCE1; }
   .keys { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin-top: 6px; }
   .keys i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .det { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .det h4 { margin: 0 0 10px; color: var(--mag-d); font-size: 17px; }
+  .ctrls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .chip { border: 1px solid var(--mag-m); background: #fff; color: var(--mag-d); border-radius: 99px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; transition: background .2s, color .2s; }
+  .chip[aria-pressed="true"] { background: var(--mag); border-color: var(--mag); color: #fff; }
+  .ctrls input[type=search] { flex: 1 1 200px; min-width: 0; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 14px; }
+  .ctrls label { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  .tbl-wrap { overflow-x: auto; }
+  table.est { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.est th { text-align: left; font-size: 12px; color: #fff; background: var(--mag); padding: 8px 10px; position: sticky; top: 0; }
+  table.est td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.est tr:nth-child(even) td { background: #FDF5F9; }
+  .st { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+  .st.ok { background: #E6F5EC; color: #1F7A4D; } .st.mid { background: #FDF0E4; color: #9A4A06; } .st.no { background: #F3EDF0; color: #6B6B6B; }
+  .falta { color: var(--ink); } .falta.listo { color: #1F7A4D; font-weight: 600; }
+  .count { font-size: 13px; color: var(--muted); margin-top: 8px; }
   .note { margin-top: 14px; background: var(--mag-l); border-left: 4px solid var(--mag); border-radius: 10px; padding: 12px 16px; font-size: 14px; }
 
   .support { margin-top: 34px; background: var(--mag-d); color: #fff; border-radius: 16px; padding: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -256,6 +272,27 @@
   <h3 class="reveal">¿Cómo va mi grupo?</h3>
   <p class="reveal" style="margin:-4px 0 14px;color:var(--muted);font-size:14px">Avance de cada grupo en Platzi y Slang según el reporte institucional de CESDE (corte: 19 de octubre de 2026). Solo se muestran totales del grupo.</p>
   <div class="groups" id="groups"></div>
+
+  <section class="det reveal" aria-labelledby="det-t">
+    <h4 id="det-t">Busca tu nombre: ¿qué te falta?</h4>
+    <div class="ctrls">
+      <div role="group" aria-label="Grupo" id="gfil">
+        <button class="chip" data-g="mar" aria-pressed="true">NT Martes</button>
+        <button class="chip" data-g="mie" aria-pressed="false">NT Miércoles</button>
+        <button class="chip" data-g="sab" aria-pressed="false">NT Sábado</button>
+        <button class="chip" data-g="b2" aria-pressed="false">Backend II</button>
+      </div>
+      <input type="search" id="q" placeholder="Escribe tu nombre o apellido…" aria-label="Buscar estudiante">
+      <label><input type="checkbox" id="solo"> Solo a quienes les falta algo</label>
+    </div>
+    <div class="tbl-wrap">
+      <table class="est">
+        <thead><tr><th>Estudiante</th><th>Cursos de IA en Platzi</th><th>Slang</th><th>¿Qué te falta?</th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+    <div class="count" id="cnt"></div>
+  </section>
   <div class="note reveal">Si ya terminaste un curso o un nivel y aquí no se refleja, no te preocupes: el reporte se actualiza periódicamente. Lo que cuenta es el certificado que le entregues a tu docente antes de la <b>semana 17</b>.</div>
 
   <!-- ===================== CRONOGRAMA ===================== -->
@@ -333,6 +370,45 @@
     if (e.isIntersecting) { animarBarras(e.target); ioBar.unobserve(e.target); }
   }), { threshold: .3 }) : null;
   document.querySelectorAll('.gcard').forEach(c => ioBar ? ioBar.observe(c) : animarBarras(c));
+
+  // Detalle por estudiante: [grupo, nombre, cursos Platzi hechos, cursos del nivel, Slang activo]
+  const EST = /*__EST__*/[];
+  let gSel = 'mar';
+  const sinTildes = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  function falta(e) {
+    const [g, , h, t, sl] = e;
+    if (g === 'b2') {
+      return sl ? { txt: 'Completar 2 niveles en Slang y entregar las 2 constancias (semana 17).', ok: false }
+                : { txt: 'Activar tu cuenta de Slang, completar 2 niveles y entregar las 2 constancias (semana 17).', ok: false };
+    }
+    const r = t - h;
+    if (r <= 0) return { txt: '¡Cursos completos! Entrega los 2 certificados (semana 17).', ok: true };
+    return { txt: r === 1 ? 'Terminar 1 curso de Platzi más y entregar los certificados.' : `Terminar los ${r} cursos de Platzi y entregar los certificados.`, ok: false };
+  }
+  function pintarTabla() {
+    const q = sinTildes(document.getElementById('q').value.trim());
+    const solo = document.getElementById('solo').checked;
+    const lista = EST.filter(e => (q ? sinTildes(e[1]).includes(q) : e[0] === gSel) && !(solo && falta(e).ok));
+    const GN = { mar: 'NT Martes', mie: 'NT Miércoles', sab: 'NT Sábado', b2: 'Backend II' };
+    document.getElementById('tb').innerHTML = lista.map(e => {
+      const [g, n, h, t, sl] = e, f = falta(e);
+      const pc = h >= t ? 'ok' : h > 0 ? 'mid' : 'no';
+      return `<tr><td>${n}${q ? `<br><small style="color:var(--muted)">${GN[g]}</small>` : ''}</td>
+        <td><span class="st ${pc}">${h} de ${t}</span></td>
+        <td><span class="st ${sl ? 'ok' : 'no'}">${sl ? 'Activa' : 'Sin activar'}</span></td>
+        <td class="falta ${f.ok ? 'listo' : ''}">${f.txt}</td></tr>`;
+    }).join('') || '<tr><td colspan="4">No hay estudiantes con ese criterio.</td></tr>';
+    document.getElementById('cnt').textContent = `${lista.length} estudiante(s)` + (q ? ' encontrados en todos los grupos.' : ` en ${GN[gSel]}.`);
+  }
+  document.querySelectorAll('#gfil .chip').forEach(b => b.addEventListener('click', () => {
+    gSel = b.dataset.g;
+    document.querySelectorAll('#gfil .chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.getElementById('q').value = '';
+    pintarTabla();
+  }));
+  document.getElementById('q').addEventListener('input', pintarTabla);
+  document.getElementById('solo').addEventListener('change', pintarTabla);
+  pintarTabla();
 
   // Lista de chequeo (se recuerda en este navegador)
   document.querySelectorAll('.check').forEach(ul => {
